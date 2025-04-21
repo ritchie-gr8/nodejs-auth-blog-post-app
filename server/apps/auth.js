@@ -28,7 +28,7 @@ authRouter.post("/register", async (req, res) => {
       message: "User has been created successfully",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       message: "Internal Server Error",
     });
@@ -58,13 +58,14 @@ authRouter.post("/login", async (req, res) => {
     }
 
     const jwt = generateToken(user);
-
-    return res.status(200).json({
+    const payload = {
       message: "Login successfully",
       token: jwt,
-    });
+    };
+
+    return res.status(200).json(payload);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       message: "Internal Server Error",
     });

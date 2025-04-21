@@ -5,6 +5,7 @@ import postRouter from "./apps/posts.js";
 import authRouter from "./apps/auth.js";
 import { client } from "./utils/db.js";
 import dotenv from 'dotenv'
+import { protect } from "./middlewares/protect.js";
 
 async function init() {
   dotenv.config()
@@ -16,7 +17,7 @@ async function init() {
 
   app.use(cors());
   app.use(bodyParser.json());
-  app.use("/posts", postRouter);
+  app.use("/posts", protect, postRouter);
   app.use("/auth", authRouter);
 
   app.get("/", (req, res) => {

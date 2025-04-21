@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import { login as loginApi, register as registerApi } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -20,13 +21,18 @@ function AuthProvider(props) {
     try {
       const res = await loginApi({ username, password });
       if (res.success) {
+        const { username, firstName, lastName } = jwtDecode(res.token);
         setState({
           loading: false,
           error: null,
-          user: res.user,
+          user: {
+            username,
+            firstName,
+            lastName,
+          },
         });
         localStorage.setItem("token", res.token);
-        navigate("/")
+        navigate("/");
       } else {
         setState({
           loading: false,
@@ -49,10 +55,15 @@ function AuthProvider(props) {
     //  Function register ทำหน้าที่สร้าง Request ไปที่ API POST /register
     //  ที่สร้างไว้ด้านบนพร้อมกับ Body ที่กำหนดไว้ในตารางที่ออกแบบไว้
     try {
-      const res = await registerApi({ username, firstName, lastName, password });
+      const res = await registerApi({
+        username,
+        firstName,
+        lastName,
+        password,
+      });
       if (res.success) {
-        console.log(res)
-        navigate('/login')
+        console.log(res);
+        navigate("/login");
       } else {
         setState({
           loading: false,

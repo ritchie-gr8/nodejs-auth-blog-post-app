@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { api } from "../utils/jwtInterceptor";
 
 const usePosts = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const usePosts = () => {
       params.append("page", page);
       setIsError(false);
       setIsLoading(true);
-      const results = await axios.get(
+      const results = await api.get(
         `http://localhost:4000/posts?${params.toString()}`
       );
       setPosts(results.data.data);
@@ -35,7 +35,7 @@ const usePosts = () => {
     try {
       setIsError(false);
       setIsLoading(true);
-      await axios.delete(`http://localhost:4000/posts/${postId}`);
+      await api.delete(`http://localhost:4000/posts/${postId}`);
       const newPosts = posts.filter((post) => {
         return post._id !== postId;
       });
@@ -51,7 +51,7 @@ const usePosts = () => {
     try {
       setIsError(false);
       setIsLoading(true);
-      const result = await axios.get(`http://localhost:4000/posts/${postId}`);
+      const result = await api.get(`http://localhost:4000/posts/${postId}`);
       setPost(result.data.data);
       setIsLoading(false);
     } catch (error) {
@@ -64,7 +64,7 @@ const usePosts = () => {
     try {
       setIsError(false);
       setIsLoading(true);
-      await axios.post(`http://localhost:4000/posts`, data);
+      await api.post(`http://localhost:4000/posts`, data);
       setIsLoading(false);
       navigate("/");
     } catch (error) {
@@ -77,7 +77,7 @@ const usePosts = () => {
     try {
       setIsError(false);
       setIsLoading(true);
-      await axios.put(`http://localhost:4000/posts/${postId}`, data);
+      await api.put(`http://localhost:4000/posts/${postId}`, data);
       setIsLoading(false);
       navigate("/");
     } catch (error) {
